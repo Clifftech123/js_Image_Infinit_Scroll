@@ -1,25 +1,84 @@
 const imageContainer = document.getElementById("image-container");
-const Loader = document.getElementById("loader");
+const loader = document.getElementById("loader");
 
-let photoArray = [];
- 
-// unsplash api 
-const count =50;
-const apiKey = 'OJWm1dRC1FqPnJKB-iW3HVdG_lre3-hkAyF2gGn8Ekg'
-const apiURL = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${count}&`;
+// GLOBAL OBJECTS
+let ready = false;
+let imagesLoaded = 0;
+let totalImages = 0;
+let photosArray = [];
 
+// UNSPLASH API 
+const count = 30;
+const apiKey = "5RpJ_sYnKUVJV29hyunVKa_tc9aS7m2T2csF5Gj_7Tg";
+const apiUrl = `https://api.unsplash.com/photos/random?client_id=${apiKey}&count=${count}`;
 
-// GET  PHOTO FROM UNSPLASH API 
-async function getPhoto(){
-    try {
-        const response = await fetch (apiURL)
-        photoArray = await response.json();
-        console.log(photoArray);
-    } catch (error) {
-        //CATCH ERROR HERE 
-    }
+// Check if all images were loadedE LOADED
+
+// CHECK IF ALL IMAGE WER
+function imageLoaded() {
+	imagesLoaded++;
+	if (imagesLoaded === totalImages) {
+		ready = true;
+		loader.hidden = true; // Hide loader
+	}
 }
 
-// ON LOAD
-getPhoto();
+// HELPER FUNCTION TO SET THE ATTRIBUTE TO DOM
+function setAttributes(element, attributes) {
+	for (const key in attributes) {
+		element.setAttribute(key, attributes[key]);
+	}
+}
 
+// CREATE ELEMENTS  FOR LINK AND PHOTO, ADD TO DOM
+function displayPhotos() {
+	imagesLoaded = 0;
+	totalImages = photosArray.length;
+	// Run function for each object in photosArray
+	photosArray.forEach((photo) => {
+        //CRATING <a> TO LINK TO FULL PHOTOS
+		const item = document.createElement("a");
+		setAttributes(item, {
+			href: photo.links.html,
+			target: "_blank",
+		});
+        // CREATING <img> FOR PHOTO
+		const img = document.createElement("img");
+		setAttributes(img, {
+			src: photo.urls.regular,
+			alt: photo.alt_description,
+			title: photo.alt_description,
+		});
+		// Event Listener, check when each is finished loading
+		img.addEventListener("load", imageLoaded);
+		// Put <img> inside <a>, then put both inside imageContainer Element
+		item.appendChild(img);
+		imageContainer.appendChild(item);
+	});
+}
+
+
+//GET PHOTO FROM UNSPLASH API SITE
+async function getPhotos() {
+	try {
+		const response = await fetch(apiUrl);
+		photosArray = await response.json();
+		displayPhotos();
+	} catch (error) {
+		// CATCH ERRORS HERE 
+	}
+}
+
+// CHECK TO SEE IF THE SCROLLING NEAR BOTTOM OF THE  PAGE, LOAD MORE PHOTOS
+window.addEventListener("scroll", () => {
+	if (
+		window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000 &&
+		ready
+	) {
+		ready = false;
+		getPhotos();
+	}
+});
+
+// On Load
+getPhotos();
