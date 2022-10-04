@@ -1,9 +1,70 @@
 
-html {
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Arimo&family=Bebas+Neue&family=Nunito:ital,wght@1,200&family=Overpass:wght@100&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
+
+html{
+   box-sizing: border-box;
 }
 
 body {
-  margin: 0;
+    margin: 0;
+  font-family: 'Poppins', sans-serif;
   min-height: 100vh;
+  background-color: whitesmoke;
+}
+
+/* HEADER */
+h1{
+  text-align: center;
+  margin: 20px;
+  font-weight: 900;
+  font-size: 4rem;
+  letter-spacing: 10px;
+}
+
+/* LOADER */
+/* Loader class in trying the change the background */
+.loader{
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.loader img{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform:  translate(-50%, -50%);
+}
+
+
+/* IMAGE CONTAINER */
+.image-container{
+  margin: 10px 30%;
+}
+
+.image-container img{
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* MEDIA QUERY FOR LARGE SMARTPHONE  */
+@media screen and ( max-width: 767px ){
+  h1{
+    font-size: 20px;
+    font-weight: bolder;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+  /* IMAGE CONTAINER */
+  .image-container{
+    margin: 10px ;
+   
+  }
+  .image-container img{
+    border-radius: 5px;
+  }
+
 }
